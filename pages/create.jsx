@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import { useState } from 'react'
 import Header from '@/components/Header'
+import { toast } from 'react-toastify'
 
 export default function CreateNFTPage() {
   const [formData, setFormData] = useState({
@@ -17,17 +18,42 @@ export default function CreateNFTPage() {
     }))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // Perform the NFT creation logic here with formData
-    console.log(formData)
-    // Reset the form after submission
-    setFormData({
-      name: '',
-      description: '',
-      price: '',
-      imageUrl: '',
-    })
+
+    await toast.promise(
+      new Promise(async (resolve, reject) => {
+        try {
+          const response = await fetch('/api/nfts/create', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData),
+          })
+
+          if (response.ok) {
+            setFormData({
+              name: '',
+              description: '',
+              price: '',
+              imageUrl: '',
+            })
+            resolve()
+          } else {
+            reject()
+          }
+        } catch (error) {
+          console.error('Error creating NFT:', error)
+          reject()
+        }
+      }),
+      {
+        pending: 'Lazy minting...',
+        success: 'NFT created successfully 👌',
+        error: 'Encountered error 🤯',
+      }
+    )
   }
 
   return (
