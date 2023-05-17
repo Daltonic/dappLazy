@@ -33,7 +33,7 @@ export default function CreateNFTPage() {
   return (
     <div>
       <Head>
-        <title>Create Next App</title>
+        <title>Dapp Lazy - Create</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />
@@ -54,19 +54,7 @@ export default function CreateNFTPage() {
               required
             />
           </div>
-          <div className="mb-4">
-            <label htmlFor="description" className="block font-semibold mb-2">
-              Description
-            </label>
-            <textarea
-              id="description"
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md"
-              required
-            />
-          </div>
+
           <div className="mb-4">
             <label htmlFor="price" className="block font-semibold mb-2">
               Price
@@ -81,6 +69,7 @@ export default function CreateNFTPage() {
               required
             />
           </div>
+
           <div className="mb-4">
             <label htmlFor="imageUrl" className="block font-semibold mb-2">
               Image URL
@@ -95,6 +84,21 @@ export default function CreateNFTPage() {
               required
             />
           </div>
+
+          <div className="mb-4">
+            <label htmlFor="description" className="block font-semibold mb-2">
+              Description
+            </label>
+            <textarea
+              id="description"
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md"
+              required
+            />
+          </div>
+
           <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-md">
             Create NFT
           </button>
