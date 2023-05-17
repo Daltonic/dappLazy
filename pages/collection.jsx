@@ -1,8 +1,12 @@
 import Head from 'next/head'
 import Card from '@/components/Card'
 import Header from '@/components/Header'
+import { useGlobalState } from '@/store'
 
 export default function Collection({ nfts }) {
+  const [connectedAccount] = useGlobalState('connectedAccount')
+  nfts = nfts.filter((nft) => nft.owner == connectedAccount)
+
   return (
     <div>
       <Head>
@@ -12,12 +16,18 @@ export default function Collection({ nfts }) {
 
       <Header />
 
-      <div className="container mx-auto py-10">
-        <h1 className="text-3xl font-bold mb-6">Off-Chain Collection</h1>
-        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {nfts.map((nft, i) => (
-            <Card key={i} nftData={nft} btn />
-          ))}
+      <div className="container p-10">
+        <div className="mx-auto">
+          <h1 className="text-3xl font-bold mb-6">Off-Chain Collection</h1>
+          {nfts.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-4 lg:gap-3 py-2.5">
+              {nfts.map((nft, i) => (
+                <Card key={i} nftData={nft} btn />
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-400">You have no collection on your account...</p>
+          )}
         </div>
       </div>
     </div>

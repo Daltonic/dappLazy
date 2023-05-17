@@ -1,9 +1,11 @@
 import Head from 'next/head'
 import { useState } from 'react'
 import Header from '@/components/Header'
+import { useGlobalState } from '@/store'
 import { toast } from 'react-toastify'
 
 export default function CreateNFTPage() {
+  const [connectedAccount] = useGlobalState('connectedAccount')
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -20,7 +22,8 @@ export default function CreateNFTPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-
+    if(!connectedAccount) return toast.warning('Please connect wallet...')
+    
     await toast.promise(
       new Promise(async (resolve, reject) => {
         try {
@@ -29,7 +32,7 @@ export default function CreateNFTPage() {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify(formData),
+            body: JSON.stringify({ ...formData, owner: connectedAccount }),
           })
 
           if (response.ok) {
