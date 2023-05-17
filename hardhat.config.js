@@ -6,7 +6,7 @@ module.exports = {
   networks: {
     hardhat: {},
     localhost: {
-      url: 'http://127.0.0.1:8545',
+      url: process.env.REACT_APP_RPC_URL,
     },
   },
   solidity: {
