@@ -8,11 +8,15 @@ import { useGlobalState } from '@/store'
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   const [connectedAccount] = useGlobalState('connectedAccount')
-  
+
   useEffect(() => {
-    isWallectConnected()
+    const fetchData = async () => {
+      await isWallectConnected()
+    }
+
+    fetchData()
   }, [connectedAccount])
-  
+
   return (
     <>
       <Component {...pageProps} />

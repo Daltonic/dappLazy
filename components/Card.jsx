@@ -1,7 +1,36 @@
-import { truncate } from '@/store'
+import { mintNft } from '@/services/blockchain'
+import { truncate, useGlobalState } from '@/store'
+import { useRouter } from 'next/router'
 import { FaEthereum } from 'react-icons/fa'
+import { toast } from 'react-toastify'
 
 const Card = ({ nftData, btn }) => {
+  const [connectedAccount] = useGlobalState('connectedAccount')
+  const router = useRouter()
+
+  const handleMint = async () => {
+    if (!connectedAccount) return toast.warning('Please connect wallet...')
+
+    await toast.promise(
+      new Promise(async (resolve, reject) => {
+        await mintNft(nftData)
+          .then(() => {
+            router.push('/')
+            resolve()
+          })
+          .catch((error) => {
+            alert(JSON.stringify(error))
+            reject(error)
+          })
+      }),
+      {
+        pending: 'Listing NFT...',
+        success: 'NFT Listed successfully...',
+        error: 'Encoutered an error',
+      }
+    )
+  }
+
   return (
     <div className="bg-white rounded-lg p-6 shadow-md">
       <img src={nftData.imageUrl} alt={nftData.name} className="w-full h-56 object-cover mb-4" />
@@ -9,8 +38,9 @@ const Card = ({ nftData, btn }) => {
       <p className="text-gray-500 mb-4">{truncate(nftData.description, 100, 0, 103)}</p>
       {btn ? (
         <button
+          onClick={handleMint}
           className="bg-blue-500 text-white px-2 py-1 rounded-md
-        hover:bg-gray-200 transition-colors duration-300"
+          hover:bg-gray-200 transition-colors duration-300"
         >
           <p className="flex justify-start items-center space-x-1">
             <FaEthereum />
